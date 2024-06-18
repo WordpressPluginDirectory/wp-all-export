@@ -3,7 +3,7 @@
 Plugin Name: WP All Export
 Plugin URI: http://www.wpallimport.com/upgrade-to-wp-all-export-pro/?utm_source=export-plugin-free&utm_medium=wp-plugins-page&utm_campaign=upgrade-to-pro
 Description: Export any post type to a CSV or XML file. Edit the exported data, and then re-import it later using WP All Import.
-Version: 1.4.2
+Version: 1.4.5
 Author: Soflyy
 */
 
@@ -59,7 +59,7 @@ else {
 	 */
 	define('PMXE_PREFIX', 'pmxe_');
 
-	define('PMXE_VERSION', '1.4.2');
+	define('PMXE_VERSION', '1.4.5');
 
     define('PMXE_ASSETS_VERSION', '-1.0.2');
 
@@ -383,7 +383,9 @@ else {
 
             if(!wp_doing_ajax()) {
 
-                if (!get_option('wp_all_export_free_addons_not_included', false) && current_user_can('manage_options') && (!XmlExportEngine::get_addons_service()->isAcfAddonActive() || !XmlExportEngine::get_addons_service()->isWooCommerceAddonActive())) {
+	            $addons_not_included = get_option('wp_all_export_free_addons_not_included', false);
+
+                if (!$addons_not_included && current_user_can('manage_options') && (!XmlExportEngine::get_addons_service()->isAcfAddonActive() || !XmlExportEngine::get_addons_service()->isWooCommerceAddonActive())) {
 
                     $this->showDismissibleNotice('<h1 style="padding-top:0">Important Notice Regarding WP All Export</h1><br><strong>WP All Export now requires paid add-ons to export ACF and WooCommerce data.<br/>We are providing these Pro add-ons to everyone who was using WP All Export before the change, free of charge. Please contact support for further assistance: <a href="https://www.wpallimport.com/support/" target="_blank">https://www.wpallimport.com/support/</a>', 'wpae_free_export_addons_notice');
                 }
@@ -1025,6 +1027,11 @@ else {
             }
             return $subject;
         }
+
+		public static function hposEnabled()
+		{
+			return class_exists('Automattic\WooCommerce\Utilities\OrderUtil') && \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled();
+		}
     }
 
 	PMXE_Plugin::getInstance();
