@@ -237,7 +237,7 @@ $columns = apply_filters('pmxe_manage_imports_columns', $columns);
                                                         in_array('shop_coupon', $item['options']['cpt']) ||
                                                         in_array('shop_review', $item['options']['cpt']) ) && !$addons->isWooCommerceAddonActive())
                                                 ||
-                                                ($item['options']['export_type'] == 'advanced' && in_array($item['options']['exportquery']->query['post_type'], array(array('product', 'product_variation'), 'shop_order', 'shop_coupon')) && !$addons->isWooCommerceAddonActive())
+                                                ($item['options']['export_type'] == 'advanced' && !empty($item['options']['exportquery']) && in_array($item['options']['exportquery']->query['post_type'], array(array('product', 'product_variation'), 'shop_order', 'shop_coupon')) && !$addons->isWooCommerceAddonActive())
                                             ) {
                                                 ?>
                                                 href="<?php echo esc_url(add_query_arg(array('id' => $item['id'], 'action' => 'options','_wpnonce_options' => wp_create_nonce('options')), $this->baseUrl)) ?>"
@@ -509,14 +509,3 @@ $columns = apply_filters('pmxe_manage_imports_columns', $columns);
 
 
 <div class="wpallexport-super-overlay"></div>
-
-<fieldset class="optionsset column rad4 wp-all-export-scheduling-help">
-
-    <div class="title">
-        <span style="font-size:1.5em;" class="wpallexport-add-row-title"><?php esc_html_e('Automatic Scheduling', 'wp_all_export_plugin'); ?></span>
-    </div>
-
-    <?php
-    include_once __DIR__.'/../../../src/Scheduling/views/SchedulingHelp.php';
-    ?>
-</fieldset>
